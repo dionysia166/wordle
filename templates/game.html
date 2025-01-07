@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wordle Game</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    {% include 'messages.html' %}
+
+    <div class="container">
+        <h2>Wordle Game</h2>
+        <form method="post" action="/game">
+            {% for attempt in range(max_attempts) %}
+            <div class="attempt {% if attempt == current_attempt %}current-attempt{% endif %}">
+                {% for input in range(5) %}
+                <input
+                    type="text"
+                    class="input-box {% if attempt < current_attempt %}{{ feedback[attempt][input] }}{% endif %}"
+                    name="attempt_{{ attempt }}_{{ input }}"
+                    maxlength="1"
+                    {% if attempt < current_attempt %}
+                        value="{{ attempts[attempt][input] }}"
+                        disabled
+                    {% elif attempt == current_attempt %}
+                        autofocus
+                    {% endif %}
+                >
+                {% endfor %}
+            </div>
+            {% endfor %}
+            {% if not game_won and not game_lost %}
+            <button type="submit">Validate</button>
+            {% endif %}
+        </form>
+    </div>
+    
+</body>
+</html>
